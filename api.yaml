@@ -143,7 +143,7 @@ paths:
       parameters:
         - name: username
           in: path
-          description: name that need to be deleted
+          description: name that need to be updated
           required: true
           schema:
             type: string
@@ -233,7 +233,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Profile'
         '400':
-          description: Invalid profileid supplied
+          description: Invalid user id supplied
         '404':
           description: Profile not found
     put:
@@ -244,7 +244,7 @@ paths:
       parameters:
         - name: userId
           in: path
-          description: user id that need to be deleted
+          description: user id that need to be updated
           required: true
           schema:
             type: integer
@@ -312,6 +312,109 @@ paths:
                   $ref: '#/components/schemas/Profile'
         '400':
           description: Invalid skill value
+  /feedback:
+    post:
+      tags:
+        - feedback
+      summary: Create feedback
+      operationId: createFeedback
+      requestBody:
+        description: Created feedback object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feedback'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Feedback'
+  /feedback/{id}:
+    get:
+      tags:
+        - feedback
+      summary: Get feedback by feedback id
+      description: ''
+      operationId: getFeedbackById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feedback'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Feedback'
+        '400':
+          description: Invalid feedback id supplied
+        '404':
+          description: Feedback not found
+    put:
+      tags:
+        - feedback
+      summary: Update feedback
+      operationId: updateFeedback
+      parameters:
+        - name: id
+          in: path
+          description: id that need to be updated
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update an existent feedback
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+        - feedback
+      summary: Delete feedback
+      operationId: deleteFeedback
+      parameters:
+        - name: id
+          in: path
+          description: The feedback that needs to be deleted
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '400':
+          description: Invalid feedback id supplied
+        '404':
+          description: Feedback not found
+    
 components:
   schemas:
     User:
@@ -392,6 +495,11 @@ components:
     Feedback:
       type: object
       properties:
+        id:
+          type: integer
+          description: 'unique id for the feedback'
+          format: int64
+          example: 100000
         from:
           type: integer
           description: 'user id for who leave the feedback'
