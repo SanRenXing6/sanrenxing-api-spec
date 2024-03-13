@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Swagger SanRenXing - OpenAPI 3.0
+  title: SanRenXing
   description: |-
     This is a service/platform to help you match someone who can provide you with useful suggestions and book a online call. Since we all have different skills and experience, we can learn from each other for a specific field. 
   termsOfService: http://swagger.io/terms/
@@ -102,19 +102,25 @@ paths:
       summary: Logs out current logged in user session
       description: ''
       operationId: logoutUser
-      parameters: []
+      parameters: 
+        - name: userId
+          in: query
+          description: The user id of the target user to log out
+          required: true
+          schema:
+            type: string
       responses:
         default:
           description: successful operation
-  /user/{username}:
+  /user/{userId}:
     get:
       tags:
         - user
-      summary: Get user by user name
+      summary: Get user by user id
       description: ''
-      operationId: getUserByName
+      operationId: getUserById
       parameters:
-        - name: username
+        - name: userId
           in: path
           description: 'The name that needs to be fetched. Use user1 for testing. '
           required: true
@@ -141,7 +147,7 @@ paths:
       description: This can only be done by the logged in user.
       operationId: updateUser
       parameters:
-        - name: username
+        - name: userId
           in: path
           description: name that need to be updated
           required: true
@@ -169,7 +175,7 @@ paths:
       description: This can only be done by the logged in user.
       operationId: deleteUser
       parameters:
-        - name: username
+        - name: userId
           in: path
           description: The name that needs to be deleted
           required: true
@@ -340,7 +346,7 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Feedback'
-  /feedback/{id}:
+  /feedback/{feedbackId}:
     get:
       tags:
         - feedback
@@ -348,7 +354,7 @@ paths:
       description: ''
       operationId: getFeedbackById
       parameters:
-        - name: id
+        - name: feedbackId
           in: path
           required: true
           schema:
@@ -374,7 +380,7 @@ paths:
       summary: Update feedback
       operationId: updateFeedback
       parameters:
-        - name: id
+        - name: feedbackId
           in: path
           description: id that need to be updated
           required: true
@@ -402,7 +408,7 @@ paths:
       summary: Delete feedback
       operationId: deleteFeedback
       parameters:
-        - name: id
+        - name: feedbackId
           in: path
           description: The feedback that needs to be deleted
           required: true
@@ -443,10 +449,8 @@ components:
           type: string
           example: '12345'
         userStatus:
-          type: integer
-          description: User Status
-          format: int32
-          example: 1
+          type: string
+          enum: ["Active", "Offline"]
       xml:
         name: user
     Profile:
@@ -491,7 +495,7 @@ components:
           format: int32
           example: 5
       xml:
-        name: profile
+        name: skill
     Feedback:
       type: object
       properties:
@@ -517,5 +521,5 @@ components:
         comment:
           type: string
           example: 'so glad to talk with him/her'
-         
-    
+      xml:
+        name: feedback
